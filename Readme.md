@@ -16,8 +16,7 @@ end
 ```stdout
 Guessing game 2024 by Hiro
 Input ur guess
-quit
-Your guess: quit
+q
 quitting
 end
 ```
