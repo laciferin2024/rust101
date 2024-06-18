@@ -1,6 +1,5 @@
 use std::cmp::Ordering;
 use std::io;
-use std::io::Read;
 use rand::Rng;
 
 fn main(){
@@ -25,11 +24,7 @@ fn main(){
         Ordering::Equal=> println!("Correct value"),
         Ordering::Greater=>{
             println!("Value is big");
-            eprintln!("Enter a smaller value");
-        }
-
-        _ => {
-            eprintln!("invalid cmp")
+            println!("Enter a smaller value");
         }
     }
 
