@@ -18,9 +18,17 @@ fn main() {
 
         io::stdin().read_line(&mut guess).expect("Failed to read line");
 
-        let guess: u32 = guess.trim().parse().expect("Please type a number");
+        guess = guess.trim().to_string();
 
         println!("Your guess: {}", guess);
+
+        if guess=="q" || guess=="quit"{
+            println!("quitting");
+            break;
+        }
+
+        let guess: u32 = guess.parse().expect("Please type a number");
+
 
         match guess.cmp(&secret_number) {
             Ordering::Less => println!("{}","Too small".yellow()),
