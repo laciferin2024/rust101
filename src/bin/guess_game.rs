@@ -20,8 +20,6 @@ fn main() {
 
         guess = guess.trim().to_string();
 
-        println!("Your guess: {}", guess);
-
         if guess=="q" || guess=="quit"{
             println!("quitting");
             break;
@@ -29,6 +27,7 @@ fn main() {
 
         let guess: u32 = guess.parse().expect("Please type a number");
 
+        println!("Your guess: {}", guess);
 
         match guess.cmp(&secret_number) {
             Ordering::Less => println!("{}","Too small".yellow()),
