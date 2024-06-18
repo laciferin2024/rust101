@@ -10,3 +10,5 @@ setup:
     cargo install cargo-script
 
 
+run *ARGS:
+    cargo

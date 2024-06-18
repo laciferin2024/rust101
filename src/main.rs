@@ -1,4 +1,4 @@
 fn main(){
-    println!("Hi I m hiro")
-    eprintln!("Rust 101")
+    println!("Hi I m hiro");
+    eprintln!("Rust 101");
 }
