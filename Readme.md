@@ -12,3 +12,12 @@ Your guess: 22
 Correct value
 end
 ```
+
+```stdout
+Guessing game 2024 by Hiro
+Input ur guess
+quit
+Your guess: quit
+quitting
+end
+```
