@@ -13,7 +13,7 @@ fn main() {
     // println!("Secret No: {}", secret_number);
 
     loop {
-        let mut guess = String::new();
+        let mut guess = String::new(); //guess is appended not replaced by  stdin();  do guess.clear () other way around
 
         io::stdin().read_line(&mut guess).expect("Failed to read line");
 
