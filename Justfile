@@ -6,3 +6,7 @@ set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 set dotenv-filename := ".env"
 set export
 
+setup:
+    cargo install cargo-script
+
+
