@@ -9,11 +9,12 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(0..100);
 
-    let mut guess = String::new();
 
     // println!("Secret No: {}", secret_number);
 
     loop {
+        let mut guess = String::new();
+
         io::stdin().read_line(&mut guess).expect("Failed to read line");
 
         let guess: u32 = guess.trim().parse().expect("Please type a number");
