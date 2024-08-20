@@ -24,11 +24,16 @@ fn handle_connection(mut stream: TcpStream){
     stream.read(&mut buffer).unwrap();
     println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
 
-    let htmlContent = fs::read_to_string("index.html").unwrap();
-
-    // every statement is separated by a carriage return \r and line \n
+    let acceptedReq = b"GET / HTTP/1.1\r\n";
+    let mut inputFile;
+    if buffer.starts_with(acceptedReq) {
+        inputFile = "index.html";
+        // every statement is separated by a carriage return \r and line \n
+    }else {
+        inputFile = "404.html";
+    }
+    let htmlContent = fs::read_to_string(inputFile).unwrap();
     let response = format!("HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}", htmlContent.len(), htmlContent);
-
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
