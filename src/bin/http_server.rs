@@ -2,17 +2,22 @@ use std::fmt::format;
 use std::{fs, thread};
 use std::net::{TcpListener, TcpStream};
 use std::io::{Read, Write};
-use std::thread::sleep;
 use std::time::Duration;
+use rust101::ThreadPool;
 
 fn main(){
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+
+    let pool = rust101::ThreadPool::new(1);
 
     for stream in listener.incoming()
     {
         let stream  = stream.unwrap();
         println!("Connection Established");
-        handle_connection(stream);
+
+        pool.execute(||{
+            handle_connection(stream);
+        })
     }
 
 
