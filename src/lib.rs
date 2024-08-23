@@ -4,7 +4,7 @@ use std::thread;
 
 pub struct ThreadPool{
    workers: Vec<Worker>,
-    sender: mpsc::Sender<Box<Job>>,
+    sender: mpsc::Sender<Job>,
 }
 
 struct Worker {
@@ -13,11 +13,11 @@ struct Worker {
 }
 
 
-type Job = Box<dyn FnOnce() + Send + 'static>
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 impl Worker{
     fn new (id:usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>)->Worker{
-        let thread = thread::spawn(||{
+        let thread = thread::spawn(move || {
             let job = receiver.lock().unwrap().recv().unwrap();
 
             println!("Worker {} got a job; executing", id);
