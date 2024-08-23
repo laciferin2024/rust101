@@ -9,6 +9,7 @@ fn main(){
 
     let pool = rust101::ThreadPool::new(4);
 
+    // Terminates after 2 takes: Drop::drop is called
     for stream in listener.incoming().take(2)
     {
         let stream  = stream.unwrap();
