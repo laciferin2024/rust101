@@ -9,7 +9,7 @@ fn main(){
 
     let pool = rust101::ThreadPool::new(4);
 
-    for stream in listener.incoming()
+    for stream in listener.incoming().take(2)
     {
         let stream  = stream.unwrap();
         println!("Connection Established");
@@ -18,6 +18,8 @@ fn main(){
             handle_connection(stream);
         })
     }
+
+    print!("Shutting down");
 
 
 
