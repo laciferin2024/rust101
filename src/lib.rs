@@ -12,7 +12,8 @@ struct Worker {
     thread: thread::JoinHandle<()>,
 }
 
-struct Job;
+
+type Job = Box<dyn FnOnce() + Send + 'static>
 
 impl Worker{
     fn new (id:usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>)->Worker{
