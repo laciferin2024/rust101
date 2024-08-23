@@ -50,15 +50,13 @@ impl Worker{
             match message {
                 Message::NewJob(job) =>{
                      println!("Worker {} got a job; executing", id);
+                     job();
                 }
                 Message::Terminate=>{
                     println!("Worker {} terminates", id);
                     break;
                 }
             }
-
-
-            job();
         });
 
         Worker{id,thread: Some(thread)}
