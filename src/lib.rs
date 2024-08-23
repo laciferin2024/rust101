@@ -4,7 +4,7 @@ use std::thread;
 
 pub struct ThreadPool{
    workers: Vec<Worker>,
-    sender: mpsc::Sender<Job>,
+    sender: Sender<Job>,
 }
 
 struct Worker {
