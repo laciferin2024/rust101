@@ -10,16 +10,17 @@ use rocket::serde::json::Value;
 
 const URI_RELEASES_PREFIX: Origin<'static> = uri!("/releases");
 
-#[get("/hello")]
-fn hello() -> String {
-    String::from("Hello World")
-}
-
 #[get("/")]
 fn index() -> Redirect {
     let msg : Option<&str> = None;
     Redirect::to(uri!(URI_RELEASES_PREFIX, releases("osx", "v1.0",msg)))
 }
+
+#[get("/hello")]
+fn hello() -> String {
+    String::from("Hello World")
+}
+
 
 #[get("/<platform>/<version>?<msg>")]
 fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Status>{

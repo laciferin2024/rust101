@@ -1,4 +1,3 @@
-use futures::stream::MapErr;
 use std::sync::mpsc::Sender;
 use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
