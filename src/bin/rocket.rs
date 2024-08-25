@@ -43,7 +43,7 @@ async fn releases(platform:&str, version:&str,msg: Option<String>, client: &Stat
         return Err(Status::NoContent);
     }
 
-    get_latest_release(client,REPO_GOLANG).await.or(Err(Status::NoContent));
+    let response = get_latest_release(client,REPO_GOLANG).await.or(Err(Status::NoContent));
 
 
     Ok(json!({
