@@ -26,7 +26,7 @@ fn hello() -> String {
 fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Status>{
 
     if let Some(msg) = msg {
-        println!("{msg}");
+        println!("msg is {msg}");
         return Err(Status::NoContent);
     }
 
