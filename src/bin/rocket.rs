@@ -2,6 +2,7 @@
 extern crate rocket;
 
 use std::fmt::format;
+use futures::TryStreamExt;
 use reqwest::Client;
 use rocket::form::error::Entity::Value;
 use rocket::http::Status;
@@ -31,6 +32,8 @@ async fn get_latest_release(client: &Client, repo: &str) -> Result<Value, reqwes
     Ok(github_release)
 }
 
+const REPO_GOLANG : &str ="golang/go";
+
 #[get("/<platform>/<version>?<msg>")]
 fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Status>{
 
@@ -38,6 +41,10 @@ fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Statu
         println!("msg is {msg}");
         return Err(Status::NoContent);
     }
+
+    get_latest_release(client,REPO_GOLANG).or_else(
+        Err(Status::NoContent)
+    );
 
     Ok(json!({
         "notes": "ready",
