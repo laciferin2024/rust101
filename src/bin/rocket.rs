@@ -3,10 +3,10 @@ extern crate rocket;
 
 #[get("/")]
 fn index() -> String {
-    String::from("Hello World");
+    String::from("Hello World")
 }
 
 #[launch]
-fn rocket() {
+fn rocket() -> _ {
     rocket::build().mount("/", routes![index])
 }
