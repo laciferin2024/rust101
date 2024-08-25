@@ -1409,6 +1409,8 @@ dependencies = [
  "rand 0.9.0-alpha.1",
  "reqwest",
  "rocket",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
