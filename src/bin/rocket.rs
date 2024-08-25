@@ -14,6 +14,7 @@ const URI_RELEASES_PREFIX: Origin<'static> = uri!("/releases");
 fn hello() -> String {
     String::from("Hello World")
 }
+
 #[get("/")]
 fn index() -> Redirect {
     let msg : Option<&str> = None;
