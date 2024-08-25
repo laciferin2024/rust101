@@ -24,7 +24,7 @@ fn index() -> Redirect {
 fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Status>{
 
     if let Some(msg) = msg {
-        println!("msg is {}", msg);
+        println!("{msg}");
         return Err(Status::NoContent);
     }
 
@@ -32,7 +32,9 @@ fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Statu
 
 
     Ok(json!({
-        "notes": "Works"
+        "notes": "ready",
+        "platform": platform,
+        "version": version,
     }))
 }
 
