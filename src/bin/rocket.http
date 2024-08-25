@@ -1,0 +1,16 @@
+
+### index
+GET {{u}}
+Accept: application/json
+
+### hello
+GET {{u}}/hello
+Accept: application/json
+
+### releases
+GET {{u}}//releases/osx/v1.0
+Accept: application/json
+
+### releases msg
+GET {{u}}//releases/osx/v1.0?msg=1
+Accept: application/json
