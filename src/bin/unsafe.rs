@@ -4,9 +4,10 @@ fn main() {
     let  blunder: *mut i32 = &mut x;
 
     unsafe {
-        println!("The value of x is: {}", *r);
+        println!("The value of r is: {}", *r);
         *blunder+=1;
-        *blunder;
+        println!("The value of x is: {}, x is supposed to be {x}", *r);
+
     // dereference a raw pointer
     }
 }
