@@ -50,6 +50,7 @@ async fn releases(platform:&str, version:&str,msg: Option<String>, client: &Stat
         "notes": "ready",
         "platform": platform,
         "version": version,
+        "response": response,
     }))
 }
 
