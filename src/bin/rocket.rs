@@ -2,14 +2,15 @@
 extern crate rocket;
 
 use std::fmt::format;
-use futures::TryStreamExt;
+use futures::{TryFutureExt, TryStreamExt};
 use reqwest::Client;
-use rocket::form::error::Entity::Value;
 use rocket::http::Status;
 use rocket::http::uri::Origin;
+use rocket::outcome::IntoOutcome;
 use rocket::response::Redirect;
 use rocket::serde::json::serde_json::json;
 use rocket::serde::json::Value;
+use rocket::State;
 
 const URI_RELEASES_PREFIX: Origin<'static> = uri!("/releases");
 
@@ -25,7 +26,7 @@ fn hello() -> String {
 }
 
 
-async fn get_latest_release(client: &Client, repo: &str) -> Result<Value, reqwest::Error> {
+async fn get_latest_release(client: &State<Client>, repo: &str) -> Result<Value, reqwest::Error> {
     let url = format!("https://api.github.com/repos/{repo}/releases/latest");
     let response = client.get(&url).send().await?;
     let github_release = response.json::<Value>().await?;
@@ -35,16 +36,15 @@ async fn get_latest_release(client: &Client, repo: &str) -> Result<Value, reqwes
 const REPO_GOLANG : &str ="golang/go";
 
 #[get("/<platform>/<version>?<msg>")]
-fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Status>{
+async fn releases(platform:&str, version:&str,msg: Option<String>, client: &State<Client>)->Result<Value,Status>{
 
     if let Some(msg) = msg {
         println!("msg is {msg}");
         return Err(Status::NoContent);
     }
 
-    get_latest_release(client,REPO_GOLANG).or_else(
-        Err(Status::NoContent)
-    );
+    get_latest_release(client,REPO_GOLANG).await.or(Err(Status::NoContent));
+
 
     Ok(json!({
         "notes": "ready",
@@ -56,6 +56,9 @@ fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Statu
 #[launch]
 fn rocket() -> _ {
     rocket::build().
+        manage(
+          Client::builder().user_agent("reqwest").build().unwrap()
+        ).
         mount("/", routes![index]).
         mount("/hello", routes![hello]).
         mount(URI_RELEASES_PREFIX.to_string(), routes![releases])
