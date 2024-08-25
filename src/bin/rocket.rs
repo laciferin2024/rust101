@@ -29,9 +29,6 @@ fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Statu
         return Err(Status::NoContent);
     }
 
-
-
-
     Ok(json!({
         "notes": "ready",
         "platform": platform,
