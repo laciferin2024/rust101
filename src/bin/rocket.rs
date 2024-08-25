@@ -33,7 +33,7 @@ async fn get_latest_release(client: &State<Client>, repo: &str) -> Result<Value,
     Ok(github_release)
 }
 
-const REPO_GOLANG : &str ="golang/go";
+const REPO_GOLANG_AIR: &str ="air-verse/air";
 
 #[get("/<platform>/<version>?<msg>")]
 async fn releases(platform:&str, version:&str,msg: Option<String>, client: &State<Client>)->Result<Value,Status>{
@@ -43,15 +43,24 @@ async fn releases(platform:&str, version:&str,msg: Option<String>, client: &Stat
         return Err(Status::NoContent);
     }
 
-    let response = get_latest_release(client,REPO_GOLANG).await.or(Err(Status::NoContent));
+    // let response = get_latest_release(client,REPO_GOLANG).await.or(Err(Status::NoContent));
+    let mut response = get_latest_release(client, REPO_GOLANG_AIR).await;
 
 
-    Ok(json!({
-        "notes": "ready",
-        "platform": platform,
-        "version": version,
-        "response": response,
-    }))
+    match response{
+        Err(e) => {
+            println!("request errored with {}", e);
+            return Err(Status::NoContent)
+        },
+        Ok(response)=> {
+            Ok(json!({
+                "notes": "ready",
+                "platform": platform,
+                "version": version,
+                "response": response ,
+            }))
+        }
+    }
 }
 
 #[launch]
