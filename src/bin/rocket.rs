@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate rocket;
 
+use std::fmt::format;
+use rocket::http::Status;
 use rocket::http::uri::Origin;
 use rocket::response::Redirect;
 use rocket::serde::json::serde_json::json;
@@ -19,12 +21,19 @@ fn index() -> Redirect {
 }
 
 #[get("/<platform>/<version>?<msg>")]
-fn releases(platform:&str, version:&str,msg: Option<String>)->Value{
+fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Status>{
+
+    if let Some(msg) = msg {
+        println!("msg is {}", msg);
+        return Err(Status::NoContent);
+    }
 
 
-    json!({
+
+
+    Ok(json!({
         "notes": "Works"
-    })
+    }))
 }
 
 #[launch]
