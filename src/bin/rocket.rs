@@ -2,6 +2,8 @@
 extern crate rocket;
 
 use std::fmt::format;
+use reqwest::Client;
+use rocket::form::error::Entity::Value;
 use rocket::http::Status;
 use rocket::http::uri::Origin;
 use rocket::response::Redirect;
@@ -21,6 +23,13 @@ fn hello() -> String {
     String::from("Hello")
 }
 
+
+async fn get_latest_release(client: &Client, repo: &str) -> Result<Value, reqwest::Error> {
+    let url = format!("https://api.github.com/repos/{repo}/releases/latest");
+    let response = client.get(&url).send().await?;
+    let github_release = response.json::<Value>().await?;
+    Ok(github_release)
+}
 
 #[get("/<platform>/<version>?<msg>")]
 fn releases(platform:&str, version:&str,msg: Option<String>)->Result<Value,Status>{
