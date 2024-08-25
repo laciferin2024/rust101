@@ -16,9 +16,9 @@ fn index() -> Redirect {
     Redirect::to(uri!(URI_RELEASES_PREFIX, releases("osx", "v1.0",msg)))
 }
 
-#[get("/hello")]
+#[get("/")]
 fn hello() -> String {
-    String::from("Hello World")
+    String::from("Hello")
 }
 
 
