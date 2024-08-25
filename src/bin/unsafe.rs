@@ -10,4 +10,19 @@ fn main() {
 
     // dereference a raw pointer
     }
+    unsafe_arr()
+}
+
+
+fn unsafe_arr(){
+     let mut arr = [1, 2, 3];
+    let ptr = arr.as_mut_ptr();
+
+    unsafe {
+        for i in 0..4 {
+            *ptr.add(i) = i as i32;
+        }
+    }
+
+    println!("{:?}", arr);
 }
