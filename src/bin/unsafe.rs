@@ -1,3 +1,6 @@
+use std::fmt::Pointer;
+use std::mem::ManuallyDrop;
+
 fn main() {
     let mut x: i32 = 42;
     let r: *const i32 = &22;
@@ -10,7 +13,8 @@ fn main() {
 
     // dereference a raw pointer
     }
-    unsafe_arr()
+    unsafe_arr();
+    manual_drop();
 }
 
 
@@ -25,4 +29,14 @@ fn unsafe_arr(){
     }
 
     println!("{:?}", arr);
+}
+
+fn manual_drop(){
+    let mut x = ManuallyDrop::new(Box::new(42));
+
+    unsafe {
+        ManuallyDrop::drop(&mut x); // Manually drop the Box
+        // Double drop occurs here when `x` goes out of scope
+    }
+    println!("{}",x.to_string());
 }
