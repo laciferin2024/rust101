@@ -1,3 +1,4 @@
+use std::net::IpAddr;
 use poem::listener::TcpListener;
 use poem::Route;
 use poem::web::Query;
@@ -20,8 +21,15 @@ impl Api{
 
 #[tokio::main]
 async fn main()->Result<(), std::io::Error>{
-    let api_service = OpenApiService::new(Api, "hello world", "1.0").server("http://localhost:3001/api");
+    const  PORT: i32 = 3000;
+    const IP: &str ="127.0.0.1";
+    let SERVER_URL: String = format!("127.0.0.1:{PORT}");
+
+
+    let api_service = OpenApiService::new(Api, "hello world", "1.0").server(format!("http://localhost:{PORT}/api"));
     let ui = api_service.swagger_ui();
     let app = Route::new().nest("/api", api_service).nest("/",ui);
-    poem::Server::new(TcpListener::bind("127.0.0.1:3001")).run(app).await
+
+    println!("Server started on {SERVER_URL}");
+    poem::Server::new(TcpListener::bind(format!("127.0.0.1:{PORT}"))).run(app).await
 }
