@@ -11,7 +11,7 @@ struct Api;
 #[OpenApi]
 impl Api{
     #[oai(path="/hello", method = "get")]
-    async fn index(&self, name: Query<Option<String>>)->PlainText<String>{
+    async fn hello(&self, name: Query<Option<String>>)->PlainText<String>{
         println!("name={}",name.to_json_string());
 
         // PlainText("hey".to_string())
@@ -19,6 +19,10 @@ impl Api{
             Some(name) =>PlainText(format!("hello, {}",name)),
             None=>PlainText("hello!".to_string()),
         }
+    }
+    #[oai(path="/hi", method = "get")]
+    async fn hi(&self)->PlainText<String>{
+        PlainText("hey".to_string())
     }
 }
 
