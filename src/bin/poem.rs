@@ -1,4 +1,3 @@
-use std::net::IpAddr;
 use poem::listener::TcpListener;
 use poem::Route;
 use poem::web::Query;
