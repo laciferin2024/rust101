@@ -10,15 +10,15 @@ struct Api;
 
 #[OpenApi]
 impl Api{
-    #[oai(path="/hello", method = "get")]
+    #[oai(path="/hello?<name>", method = "get")]
     async fn hello(&self, name: Query<Option<String>>)->PlainText<String>{
         println!("name={}",name.to_json_string());
 
-        // PlainText("hey".to_string())
         match name.0 {
-            Some(name) =>PlainText(format!("hello, {}",name)),
+            Some(name) =>PlainText(format!("hello, {name}")),
             None=>PlainText("hello!".to_string()),
         }
+        // PlainText("hello".to_string())
     }
     #[oai(path="/hi", method = "get")]
     async fn hi(&self)->PlainText<String>{

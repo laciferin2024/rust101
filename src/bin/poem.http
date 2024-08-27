@@ -1,5 +1,5 @@
 ### Hello
-GET {{u}}/hello?name=Hiro
+GET {{u}}/hello?name="Hiro"
 Accept: application/json
 
 ### hello
