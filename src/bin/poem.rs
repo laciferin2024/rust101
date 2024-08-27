@@ -1,8 +1,8 @@
+use poem::listener::TcpListener;
 use poem::Route;
 use poem::web::Query;
 use poem_openapi::{OpenApi, OpenApiService};
 use poem_openapi::payload::PlainText;
-use tokio::net::TcpListener;
 
 struct Api;
 // mod user;
