@@ -1,5 +1,4 @@
-
-### index
+### Hello
 GET {{u}}/hello?name=Hiro
 Accept: application/json
 
