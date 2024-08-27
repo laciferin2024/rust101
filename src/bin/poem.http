@@ -1,0 +1,9 @@
+
+### index
+GET {{u}}/hello?name=Hiro
+Accept: application/json
+
+### hello
+GET {{u}}/hello
+Accept: application/json
+
