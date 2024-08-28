@@ -5,6 +5,8 @@ fn main() {
     let multi_txt = String::from("Read by multiple threads");
     let multi_slice = &multi_txt[..]; //doesn't have static lifetime
 
+    println!("multi_slice {multi_slice}");
+
     let shared_txt: Arc<&str> = Arc::from(multi_slice);
     let mut handles = vec![];
 
