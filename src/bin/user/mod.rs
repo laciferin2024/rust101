@@ -1,4 +1,3 @@
-use std::ffi::CString;
 use poem_openapi::{Object, OpenApi};
 use poem_openapi::payload::Json;
 

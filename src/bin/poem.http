@@ -1,9 +1,8 @@
 ### User Service
-POST {{u}}/api/user
+POST {{u}}/user
 Content-Type: application/json
 
 {
-  "id": 1,
   "name": "Hiro",
   "haircolor": "Golden",
   "color": "yellow"
