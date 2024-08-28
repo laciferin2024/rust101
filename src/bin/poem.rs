@@ -6,7 +6,7 @@ use poem_openapi::payload::PlainText;
 use poem_openapi::types::ToJSON;
 
 struct Api;
-// mod user;
+mod user;
 
 #[OpenApi]
 impl Api{
