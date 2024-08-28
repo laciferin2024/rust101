@@ -33,11 +33,15 @@ async fn main()->Result<(), std::io::Error>{
     const IP: &str ="127.0.0.1";
     let server_url: String = format!("{IP}:{PORT}");
 
+    let endpoints = (Api,user::UserApi );
 
-    let api_service = OpenApiService::new(Api, "Hello", "1.0").server(format!("http://localhost:{PORT}/api"));
+
+    let api_service = OpenApiService::new(endpoints, "Hello", "1.0").server(format!("http://localhost:{PORT}/api"));
+
     let ui = api_service.swagger_ui();
     let app = Route::new().
-        nest("/api", api_service).nest("/",ui);
+        nest("/api", api_service).
+        nest("/",ui);
 
     println!("Server started on {server_url}");
     poem::Server::new(TcpListener::bind(format!("127.0.0.1:{PORT}"))).run(app).await
