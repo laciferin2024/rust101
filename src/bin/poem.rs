@@ -16,7 +16,7 @@ impl Api{
         println!("name={}",name.to_json_string());
 
         match name.0 {
-            Some(name) =>PlainText(format!("hello, {name}")),
+            Some(name) =>PlainText(format!("Hello, {name}")),
             None=>PlainText("hello!".to_string()),
         }
         // PlainText("hello".to_string())
