@@ -1,7 +1,7 @@
 use poem::listener::TcpListener;
 use poem::{EndpointExt, Route};
-use poem::web::Query;
 use poem_openapi::{OpenApi, OpenApiService};
+use poem_openapi::param::Query;
 use poem_openapi::payload::PlainText;
 use poem_openapi::types::ToJSON;
 
@@ -10,7 +10,8 @@ struct Api;
 
 #[OpenApi]
 impl Api{
-    #[oai(path="/hello?<name>", method = "get")]
+    #[oai(path="/hello", method = "get")]
+    //doc: Query needs to be imported from openapi not poem
     async fn hello(&self, name: Query<Option<String>>)->PlainText<String>{
         println!("name={}",name.to_json_string());
 
