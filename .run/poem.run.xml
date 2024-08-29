@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="rocket" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-    <option name="command" value="run --bin rocket" />
+  <configuration default="false" name="poem" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+    <option name="command" value="run --bin poem" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$/src/bin" />
     <envs>
       <env name="RUST_TRACEBACK" value="full" />

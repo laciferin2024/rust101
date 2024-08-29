@@ -1,0 +1,19 @@
+### User Service
+POST {{u}}/user
+Content-Type: application/json
+
+{
+  "name": "Hiro",
+  "haircolor": "Golden",
+  "color": "yellow"
+}
+
+
+### Hello
+GET {{u}}/hello?name="Hiro"
+Accept: application/json
+
+### hello
+GET {{u}}/hello
+Accept: application/json
+
