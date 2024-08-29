@@ -16,5 +16,5 @@ fn main() {
 
     let large_text: &'static str = "Hey..... this function's return type contains a borrowed value, but there is no value for it to be borrowed from
 help: consider using the `'static` lifetime, but this is uncommon unless you're returning a borrowed value from a `const` or a `static`";
-    let rc_str = Rc::from(&large_text[4..24]);
+    let rc_str: Rc<&str> = Rc::from(&large_text[4..24]);
 }
