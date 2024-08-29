@@ -9,7 +9,7 @@ fn main() {
     //
     let multi_txt = Arc::new("Read by multiple threads");
     let multi_slice = &multi_txt[..]; //doesn't have static lifetime
-    //
+
     // let multi_slice = move || -> &str{
     //     &multi_txt[..]
     // }();
@@ -23,7 +23,7 @@ fn main() {
     for _ in 0..3 {
         let text_ref = Arc::clone(&shared_txt);
         let handle = thread::spawn(move || {
-            println!("Thread is reading {text_ref}");
+            println!("Thread is reading \"{text_ref}\" ");
         });
         handles.push(handle);
     }
