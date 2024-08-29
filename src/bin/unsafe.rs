@@ -1,4 +1,3 @@
-use std::fmt::Pointer;
 use std::mem::ManuallyDrop;
 
 fn main() {

@@ -1,12 +1,9 @@
 #[macro_use]
 extern crate rocket;
 
-use std::fmt::format;
-use futures::{TryFutureExt, TryStreamExt};
 use reqwest::Client;
 use rocket::http::Status;
 use rocket::http::uri::Origin;
-use rocket::outcome::IntoOutcome;
 use rocket::response::Redirect;
 use rocket::serde::json::serde_json::json;
 use rocket::serde::json::Value;
@@ -44,7 +41,7 @@ async fn releases(platform:&str, version:&str,msg: Option<String>, client: &Stat
     }
 
     // let response = get_latest_release(client,REPO_GOLANG).await.or(Err(Status::NoContent));
-    let mut response = get_latest_release(client, REPO_GOLANG_AIR).await;
+    let response = get_latest_release(client, REPO_GOLANG_AIR).await;
 
 
     match response{
