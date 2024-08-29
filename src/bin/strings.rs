@@ -14,7 +14,6 @@ fn main() {
     //     &multi_txt[..]
     // }();
 
-
     println!("multi_slice={multi_slice}");
 
     let shared_txt: Arc<&str> = Arc::from(multi_slice);
@@ -31,5 +30,4 @@ fn main() {
     for handle in handles {
         handle.join().unwrap();
     }
-
 }

@@ -1,9 +1,8 @@
-use tracing::{event, span, Level, warn, error, debug, info};
+use tracing::{debug, error, event, info, span, warn, Level};
 use tracing_subscriber::fmt;
 
 fn main() {
-
-        // Initialize the tracing subscriber to output logs to stdout
+    // Initialize the tracing subscriber to output logs to stdout
     fmt::init();
 
     debug!("DEBUG");
