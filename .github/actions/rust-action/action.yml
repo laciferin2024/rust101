@@ -16,4 +16,5 @@ runs:
         override: true
 
     - name: Run cargo command
+      shell: bash
       run: cargo ${{ inputs.command }} --verbose
