@@ -1,4 +1,3 @@
-use std::fmt::format;
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::time::Duration;
