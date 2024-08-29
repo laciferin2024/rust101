@@ -4,6 +4,11 @@ use std::thread;
 fn main() {
     let multi_txt = String::from("Read by multiple threads");
     let multi_slice = &multi_txt[..]; //doesn't have static lifetime
+    //
+    // let multi_slice = move || -> &str{
+    //     &multi_txt[..]
+    // }();
+
 
     println!("multi_slice {multi_slice}");
 
@@ -21,4 +26,5 @@ fn main() {
     for handle in handles {
         handle.join().unwrap();
     }
+
 }
