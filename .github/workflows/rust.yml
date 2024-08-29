@@ -1,0 +1,102 @@
+name: Rust CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          profile: minimal
+          override: true
+
+      - name: Install dependencies
+        run: cargo fetch
+
+      - name: Build
+        run: cargo build --verbose
+
+  build-bin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          profile: minimal
+          override: true
+
+      - name: Install dependencies
+        run: cargo fetch
+
+      - name: Build bins
+        run: |
+          for file in bin/*.rs; do
+            [ -e "$file" ] || continue
+            echo "Building $file..."
+            cargo build --bin $(basename "$file" .rs) --verbose
+          done
+        
+
+  test:
+    runs-on: ubuntu-latest
+#    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          profile: minimal
+          override: true
+
+      - name: Run tests
+        run: cargo test --verbose
+
+  lint:
+    runs-on: ubuntu-latest
+#    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          profile: minimal
+          override: true
+
+      - name: Check formatting
+        run: cargo fmt -- --check
+
+      - name: Lint with Clippy
+        run: cargo clippy -- -D warnings

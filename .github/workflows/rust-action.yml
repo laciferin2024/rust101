@@ -1,0 +1,57 @@
+name: Rust Composite CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Rust Action
+        uses: ./.github/actions/rust-action
+        with:
+          command: build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Test with Rust Action
+        uses: ./.github/actions/rust-action
+        with:
+          command: test
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Format check with Rust Action
+        uses: ./.github/actions/rust-action
+        with:
+          command: fmt -- --check
+
+      - name: Lint with Rust Action
+        uses: ./.github/actions/rust-action
+        with:
+          command: clippy -- -D warnings

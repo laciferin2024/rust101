@@ -1,0 +1,20 @@
+name: "Rust Action"
+description: "Set up Rust and run cargo commands"
+inputs:
+  command:
+    description: "The cargo command to run"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        target: x86_64-unknown-linux-gnu
+        profile: minimal
+        override: true
+
+    - name: Run cargo command
+      shell: bash
+      run: cargo ${{ inputs.command }} --verbose
