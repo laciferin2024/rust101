@@ -1,8 +1,13 @@
 use std::sync::Arc;
 use std::thread;
 
+// static multi_txt: String = String::from("Read by multiple threads");
+
 fn main() {
-    let multi_txt = String::from("Read by multiple threads");
+    // let multi_txt = String::from("Read by multiple threads");
+    // let multi_slice = &multi_txt[..]; //doesn't have static lifetime
+    //
+    let multi_txt = Arc::new("Read by multiple threads");
     let multi_slice = &multi_txt[..]; //doesn't have static lifetime
     //
     // let multi_slice = move || -> &str{
