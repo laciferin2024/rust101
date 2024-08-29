@@ -15,7 +15,7 @@ fn main() {
     // }();
 
 
-    println!("multi_slice {multi_slice}");
+    println!("multi_slice={multi_slice}");
 
     let shared_txt: Arc<&str> = Arc::from(multi_slice);
     let mut handles = vec![];
