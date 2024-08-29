@@ -42,12 +42,12 @@ fn handle_connection(mut stream: TcpStream) {
         ("404 NOT FOUND", "404.html")
     };
 
-    let htmlContent = fs::read_to_string(inputFile).unwrap();
+    let html_content = fs::read_to_string(inputFile).unwrap();
     let response = format!(
         "HTTP/1.1 {}\r\nContent-Length: {}\r\n\r\n{}",
         status,
-        htmlContent.len(),
-        htmlContent
+        html_content.len(),
+        html_content
     );
 
     stream.write(response.as_bytes()).unwrap();
