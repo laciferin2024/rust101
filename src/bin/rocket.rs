@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate rocket;
 
+use std::collections::HashMap;
+use std::hash::Hash;
 use reqwest::Client;
 use rocket::http::uri::Origin;
 use rocket::http::Status;
@@ -33,13 +35,46 @@ async fn get_latest_release(client: &State<Client>, repo: &str) -> Result<Value,
 const REPO_GOLANG_AIR: &str = "air-verse/air";
 
 
-fn make_json_response(github_release:&Value) ->Option<Value>{
-    let mut response  = json!({
+fn make_json_response(github_release: &Value) -> Option<Value> {
+    let platforms_available: HashMap<&str, Vec<&str>> = HashMap::from([
+        ("amd64.AppImage.tar.gz", vec!["linux-x86_64"]),
+        ("app.tar.gz", vec!["darwin-x86_64", "darwin-aarch64"]),
+        ("x64_en-US.msi.zip", vec!["windows-x86_64"])
+    ]);
+
+    let mut response = json!({
         "version": github_release["tag_name"].as_str()?,
-        "notes": github_release["body"].as_str()?, //TODO: suffix
+        "notes": remove_suffix(github_release["body"].as_str()?,"See the assets to download this version and install.").trim_end_matches(['\r', '\n', ' ']), //TODO: suffix
         "pub_date": github_release["published_at"].as_str()?,
         "platforms": {},
     });
+
+    let mut response_platforms = github_release["platforms"].as_object()?;
+
+
+    for asset in github_release["assets"].as_array()?.iter() {
+        let asset = asset.as_object()?;
+        let browser_download_url = asset["browser_download_url"].as_str()?;
+        let asset_name = asset["name"].as_str()?;
+        for (extension, os_archs) in platforms_available.iter() {
+            if asset_name.ends_with((extension)) {
+                for os_arch in os_archs.iter()
+                {
+                    if !response_platforms.contains_key(*os_arch) {
+                        response_platforms.insert(os_arch.to_string(), json!({}))
+                    }
+                    response_platforms[os_arch.to_string()].as_object().insert("url".to_string(), browser_download_url);
+                }
+            } else if asset_name.ends_with(&format!("{extension}.sig")) {
+                //     make a req to sig
+                let sig = match text_request(client, browser_download_url) {
+                    Ok(s) => s,
+                    _ => String::new(),
+                };
+            }
+        }
+    }
+
     Some(response)
 }
 
@@ -80,4 +115,12 @@ fn rocket() -> _ {
         .mount("/hello", routes![hello])
         .mount(URI_RELEASES_PREFIX.to_string(), routes![releases])
     // mount("/releases", routes![releases])
+}
+
+
+fn remove_suffix<'a>(s: &'a str, suffix: &str) -> &'a str {
+    match s.strip_suffix(suffix) {
+        Some(s) => s,
+        None => s,
+    }
 }
