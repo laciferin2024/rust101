@@ -29,7 +29,7 @@ async fn get_latest_release(client: &State<Client>, repo: &str) -> Result<Value,
     let response = client.get(&url).send().await?;
     let github_release = response.json::<Value>().await?;
     // Ok(github_release)
-    make_json_response(client, &github_release).ok_or(json!({})).or_else(|e| Ok(e))
+    make_json_response(client, &github_release).await.ok_or(json!({})).or_else(|e| Ok(e))
 }
 
 const REPO_GOLANG_AIR: &str = "air-verse/air";
@@ -49,7 +49,7 @@ async fn make_json_response(client: &State<Client>, github_release: &Value) -> O
         "platforms": {},
     });
 
-    let mut response_platforms: &mut rocket::serde::json::serde_json::Map<std::string::String, rocket::serde::json::Value> = github_release["platforms"].as_object()?;
+    let mut response_platforms = response["platforms"].as_object_mut()?;
 
 
     for asset in github_release["assets"].as_array()?.iter() {
@@ -77,7 +77,7 @@ async fn make_json_response(client: &State<Client>, github_release: &Value) -> O
                     if !response_platforms.contains_key(*os_arch) {
                         response_platforms.insert(os_arch.to_string(), json!({}));
                     }
-                    response_platforms[*os_arch].as_object()?.insert("signature".to_string(), Value::String(signature.clone()));
+                    // response_platforms[*os_arch].as_object_mut()?.insert("signature".to_string(), Value::String(signature.clone()));
                 }
             }
         }
