@@ -29,13 +29,13 @@ async fn get_latest_release(client: &State<Client>, repo: &str) -> Result<Value,
     let response = client.get(&url).send().await?;
     let github_release = response.json::<Value>().await?;
     // Ok(github_release)
-    make_json_response(&github_release).ok_or(json!({})).or_else(|e| Ok(e))
+    make_json_response(client, &github_release).ok_or(json!({})).or_else(|e| Ok(e))
 }
 
 const REPO_GOLANG_AIR: &str = "air-verse/air";
 
 
-fn make_json_response(github_release: &Value) -> Option<Value> {
+async fn make_json_response(client: &State<Client>, github_release: &Value) -> Option<Value> {
     let platforms_available: HashMap<&str, Vec<&str>> = HashMap::from([
         ("amd64.AppImage.tar.gz", vec!["linux-x86_64"]),
         ("app.tar.gz", vec!["darwin-x86_64", "darwin-aarch64"]),
@@ -49,7 +49,7 @@ fn make_json_response(github_release: &Value) -> Option<Value> {
         "platforms": {},
     });
 
-    let mut response_platforms = github_release["platforms"].as_object()?;
+    let mut response_platforms: &mut rocket::serde::json::serde_json::Map<std::string::String, rocket::serde::json::Value> = github_release["platforms"].as_object()?;
 
 
     for asset in github_release["assets"].as_array()?.iter() {
@@ -61,16 +61,24 @@ fn make_json_response(github_release: &Value) -> Option<Value> {
                 for os_arch in os_archs.iter()
                 {
                     if !response_platforms.contains_key(*os_arch) {
-                        response_platforms.insert(os_arch.to_string(), json!({}))
+                        response_platforms.insert(os_arch.to_string(), json!({}));
                     }
-                    response_platforms[os_arch.to_string()].as_object().insert("url".to_string(), browser_download_url);
+                    // response_platforms[*os_arch].as_object_mut()?.insert("url".to_string(), Value::String(browser_download_url.to_string());
                 }
             } else if asset_name.ends_with(&format!("{extension}.sig")) {
                 //     make a req to sig
-                let sig = match text_request(client, browser_download_url) {
+                let signature = match text_request(client, browser_download_url).await {
                     Ok(s) => s,
                     _ => String::new(),
                 };
+
+                for os_arch in os_archs.iter()
+                {
+                    if !response_platforms.contains_key(*os_arch) {
+                        response_platforms.insert(os_arch.to_string(), json!({}));
+                    }
+                    response_platforms[*os_arch].as_object()?.insert("signature".to_string(), Value::String(signature.clone()));
+                }
             }
         }
     }
@@ -122,6 +130,6 @@ fn remove_suffix<'a>(s: &'a str, suffix: &str) -> &'a str {
     s.strip_suffix(suffix).unwrap_or_else(|| s)
 }
 
-async fn text_request (client: &State<Client>, url : &str)->Result<String, reqwest::Error>{
+async fn text_request(client: &State<Client>, url: &str) -> Result<String, reqwest::Error> {
     client.get(url).send().await?.text().await
 }
