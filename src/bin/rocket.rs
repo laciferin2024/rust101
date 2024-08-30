@@ -121,3 +121,7 @@ fn rocket() -> _ {
 fn remove_suffix<'a>(s: &'a str, suffix: &str) -> &'a str {
     s.strip_suffix(suffix).unwrap_or_else(|| s)
 }
+
+async fn text_request (client: &State<Client>, url : &str)->Result<String, reqwest::Error>{
+    client.get(url).send().await?.text().await
+}
