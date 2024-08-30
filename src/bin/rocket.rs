@@ -26,10 +26,22 @@ async fn get_latest_release(client: &State<Client>, repo: &str) -> Result<Value,
     let url = format!("https://api.github.com/repos/{repo}/releases/latest");
     let response = client.get(&url).send().await?;
     let github_release = response.json::<Value>().await?;
-    Ok(github_release)
+    // Ok(github_release)
+    make_json_response(&github_release).ok_or(json!({})).or_else(|e| Ok(e))
 }
 
 const REPO_GOLANG_AIR: &str = "air-verse/air";
+
+
+fn make_json_response(github_release:&Value) ->Option<Value>{
+    let mut response  = json!({
+        "version": github_release["tag_name"].as_str()?,
+        "notes": github_release["body"].as_str()?, //TODO: suffix
+        "pub_date": github_release["published_at"].as_str()?,
+        "platforms": {},
+    });
+    Some(response)
+}
 
 #[get("/<platform>/<version>?<msg>")]
 async fn releases(
